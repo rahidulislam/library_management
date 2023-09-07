@@ -9,3 +9,4 @@ from account.models import MemberApplication
 class MemberApplicationListCreateView(generics.ListCreateAPIView):
     queryset = MemberApplication.objects.all()
     serializer_class = MemberApplicationSerializer
+
