@@ -10,20 +10,21 @@ class User(AbstractUser):
         (ADMIN, 'Admin'),
         (MEMBER, 'Member'),
     )
+    email = models.EmailField(unique=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=2)
 
 
-class Profile(TimeStamp):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profiles')
-    image = models.ImageField(upload_to="profile", blank=True)
-    phone = models.CharField(max_length=15, blank=True)
-    address = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=255, blank=True)
-    nid= models.CharField(max_length=17, blank=True)
-    birth_registration = models.CharField(max_length=100,blank=True)
+# class Profile(TimeStamp):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profiles')
+#     image = models.ImageField(upload_to="profile", blank=True)
+#     phone = models.CharField(max_length=15, blank=True)
+#     address = models.CharField(max_length=255, blank=True)
+#     city = models.CharField(max_length=255, blank=True)
+#     nid= models.CharField(max_length=17, blank=True)
+#     birth_registration = models.CharField(max_length=100,blank=True)
 
-    def __str__(self):
-        return self.user.username
+#     def __str__(self):
+#         return self.user.username
     
 class MemberApplication(TimeStamp):
     class Status(models.TextChoices):
