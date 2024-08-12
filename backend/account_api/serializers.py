@@ -23,10 +23,16 @@ class MemberApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = MemberApplication
         fields = ('id','first_name', 'last_name', 'email', 'phone', 'address',
-                  'city', 'nid', 'birth_registration', 'image' )
+                  'city', 'nid', 'birth_registration', 'image',)
         
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['image'] = instance.get_image_url()
         data['status'] = instance.get_status_display()
+        data['reject_feedback'] = instance.reject_feedback
         return data
+
+class RejectMemberApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MemberApplication
+        fields = ('reject_feedback',)

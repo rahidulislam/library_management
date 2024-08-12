@@ -12,6 +12,8 @@ class User(AbstractUser):
     )
     email = models.EmailField(unique=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=2)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
 
 # class Profile(TimeStamp):
@@ -35,14 +37,15 @@ class MemberApplication(TimeStamp):
     user = models.OneToOneField(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='member_application')
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    email = models.EmailField()
+    email = models.EmailField(unique=True,blank=True,null=True)
     phone = models.CharField(max_length=15)
     address = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
-    nid= models.CharField(max_length=17, blank=True)
-    birth_registration = models.CharField(max_length=100,blank=True)
+    nid= models.CharField(max_length=17,unique=True, blank=True,null=True)
+    birth_registration = models.CharField(max_length=100,unique=True,blank=True,null=True)
     image = models.ImageField(upload_to="member_application", blank=True)
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.PENDING)
+    reject_feedback = models.TextField(blank=True)
 
     class Meta:
         verbose_name = 'Member Application'
