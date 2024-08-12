@@ -26,6 +26,11 @@ class Profile(TimeStamp):
         return self.user.username
     
 class MemberApplication(TimeStamp):
+    class Status(models.TextChoices):
+        PENDING = 'PENDING', 'Pending'
+        APPROVED = 'APPROVED', 'Approved'
+        REJECTED = 'REJECTED', 'Rejected'
+
     user = models.OneToOneField(User, on_delete=models.SET_NULL, blank=True, null=True, related_name='member_application')
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
@@ -36,7 +41,14 @@ class MemberApplication(TimeStamp):
     nid= models.CharField(max_length=17, blank=True)
     birth_registration = models.CharField(max_length=100,blank=True)
     image = models.ImageField(upload_to="member_application", blank=True)
-    is_approved = models.BooleanField(default=False)
+    status = models.CharField(max_length=10, choices=Status.choices, default=Status.PENDING)
+
+    class Meta:
+        verbose_name = 'Member Application'
+        verbose_name_plural = 'Member Applications'
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name
+    
+    def get_image_url(self):
+        return self.image.url if self.image else None
