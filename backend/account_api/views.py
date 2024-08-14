@@ -10,8 +10,33 @@ from account_api.serializers import (
     RejectMemberApplicationSerializer,
 )
 from account.models import MemberApplication, User
+from account_api.serializers import UserSerializer
 from backend.permissions import IsAdmin
 # Create your views here.
+
+
+class MemberSignUpView(generics.CreateAPIView):
+    serializer_class = UserSerializer
+
+    def perform_create(self, serializer):
+        user = serializer.save()
+        user.role = User.UserRoleType.MEMBER
+        user.save()
+        return user
+
+
+class AdminSignupView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAdmin]
+
+    def perform_create(self, serializer):
+        user = serializer.save()
+        user.is_superuser = True
+        user.is_staff = True
+        user.role = User.UserRoleType.ADMIN
+        user.save()
+        return user
 
 
 class SignInView(TokenObtainPairView):
