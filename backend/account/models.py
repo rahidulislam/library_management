@@ -58,9 +58,7 @@ class MemberApplication(TimeStamp):
 
     user = models.OneToOneField(
         User,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
+        on_delete=models.CASCADE,
         related_name="member_application",
     )
     status = models.CharField(
