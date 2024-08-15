@@ -9,7 +9,7 @@ from account_api.serializers import (
     MyTokenObtainPairSerializer,
     RejectMemberApplicationSerializer,
 )
-from account.models import MemberApplication, User
+from account.models import MemberApplication, User, Member
 from account_api.serializers import UserSerializer
 from backend.permissions import IsAdmin, IsMember
 # Create your views here.
@@ -74,6 +74,7 @@ class MemberApplicationListCreateView(generics.ListCreateAPIView):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
 class ApplyMembershipView(APIView):
     permission_classes = [IsMember]
     serializer_class = MemberApplicationSerializer
@@ -83,9 +84,16 @@ class ApplyMembershipView(APIView):
         serializer.is_valid(raise_exception=True)
 
         if not MemberApplication.objects.filter(user=request.user).exists():
-            serializer.save(user=request.user, status = MemberApplication.Status.PENDING)
-            return Response({"message": "Member application submitted successfully"}, status=status.HTTP_200_OK)
-        return Response({"error": "Member application already submitted"}, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save(user=request.user, status=MemberApplication.Status.PENDING)
+            return Response(
+                {"message": "Member application submitted successfully"},
+                status=status.HTTP_200_OK,
+            )
+        return Response(
+            {"error": "Member application already submitted"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
 
 class AcceptMemberApplicationView(APIView):
     permission_classes = [IsAdmin]
@@ -96,19 +104,14 @@ class AcceptMemberApplicationView(APIView):
     def post(self, request, *args, **kwargs):
         member_application = self.get_object()
         if member_application.status == MemberApplication.Status.PENDING:
-            if User.objects.filter(email=member_application.email).exists():
+            if Member.objects.filter(user=member_application.user).exists():
                 return Response(
                     {"error": "User already exists"}, status=status.HTTP_400_BAD_REQUEST
                 )
-            user = User.objects.create(
-                first_name=member_application.first_name,
-                last_name=member_application.last_name,
-                email=member_application.email,
-                role=User.MEMBER,
+            Member.objects.create(
+                user=member_application.user,
+                membership_type=member_application.membership_type,
             )
-            user.set_password(member_application.nid)
-            user.save()
-            member_application.user = user
             member_application.status = MemberApplication.Status.APPROVED
             member_application.save()
             return Response(
@@ -117,12 +120,12 @@ class AcceptMemberApplicationView(APIView):
             )
         elif member_application.status == MemberApplication.Status.APPROVED:
             return Response(
-                {"error": "Member application already approved"},
+                {"error": "Member application is already approved"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         elif member_application.status == MemberApplication.Status.REJECTED:
             return Response(
-                {"error": "Member application is rejected"},
+                {"error": "Member application is already rejected"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         else:
