@@ -11,7 +11,7 @@ from account_api.serializers import (
 )
 from account.models import MemberApplication, User
 from account_api.serializers import UserSerializer
-from backend.permissions import IsAdmin
+from backend.permissions import IsAdmin, IsMember
 # Create your views here.
 
 
@@ -74,6 +74,18 @@ class MemberApplicationListCreateView(generics.ListCreateAPIView):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+class ApplyMembershipView(APIView):
+    permission_classes = [IsMember]
+    serializer_class = MemberApplicationSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        if not MemberApplication.objects.filter(user=request.user).exists():
+            serializer.save(user=request.user, status = MemberApplication.Status.PENDING)
+            return Response({"message": "Member application submitted successfully"}, status=status.HTTP_200_OK)
+        return Response({"error": "Member application already submitted"}, status=status.HTTP_400_BAD_REQUEST)
 
 class AcceptMemberApplicationView(APIView):
     permission_classes = [IsAdmin]

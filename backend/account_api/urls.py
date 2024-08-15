@@ -2,10 +2,10 @@ from django.urls import path
 from account_api.views import (
     AdminSignupView,
     MemberSignUpView,
-    MemberApplicationListCreateView,
     SignInView,
     AcceptMemberApplicationView,
     RejectMemberApplicationView,
+    ApplyMembershipView
 )
 
 app_name = "account_api"
@@ -15,9 +15,9 @@ urlpatterns = [
     path("admin-signup/", AdminSignupView.as_view(), name="admin_signup"),
     path("token/", SignInView.as_view(), name="token_obtain_pair"),
     path(
-        "member/application/",
-        MemberApplicationListCreateView.as_view(),
-        name="member_application",
+        "membership/apply/",
+        ApplyMembershipView.as_view(),
+        name="apply_membership",
     ),
     path(
         "member/application/accept/<int:pk>/",

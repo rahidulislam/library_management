@@ -51,6 +51,9 @@ class Member(TimeStamp):
 
 
 class MemberApplication(TimeStamp):
+    class MembershipType(models.TextChoices):
+        REGULAR = "Regular", "Regular"
+        PREMIUM = "Premium", "Premium"
     class Status(models.TextChoices):
         PENDING = "PENDING", "Pending"
         APPROVED = "APPROVED", "Approved"
@@ -64,6 +67,9 @@ class MemberApplication(TimeStamp):
     status = models.CharField(
         max_length=10, choices=Status.choices, default=Status.PENDING
     )
+    membership_type = models.CharField(
+        max_length=50, choices=MembershipType.choices, default=MembershipType.REGULAR
+    )
     reject_feedback = models.TextField(blank=True)
 
     class Meta:
@@ -71,4 +77,4 @@ class MemberApplication(TimeStamp):
         verbose_name_plural = "Member Applications"
 
     def __str__(self):
-        return self.first_name + " " + self.last_name
+        return self.user.email
