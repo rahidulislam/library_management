@@ -38,7 +38,10 @@ class Member(TimeStamp):
     membership_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.user.username
+        return self.user.email
+    
+    def get_subscription_plan(self):
+        return MemberSubscription.objects.get(member=self)
 
 
 class MemberSubscription(models.Model):
