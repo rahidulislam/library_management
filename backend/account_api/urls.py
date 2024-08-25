@@ -14,11 +14,7 @@ urlpatterns = [
     path("member-signup/", MemberSignUpView.as_view(), name="user_signup"),
     path("admin-signup/", AdminSignupView.as_view(), name="admin_signup"),
     path("token/", SignInView.as_view(), name="token_obtain_pair"),
-    # path(
-    #     "membership/apply/",
-    #     ApplyMembershipView.as_view(),
-    #     name="apply_membership",
-    # ),
+    
     # path(
     #     "member/application/accept/<int:pk>/",
     #     AcceptMemberApplicationView.as_view(),

@@ -90,13 +90,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return data
 
 
-# class MemberApplicationSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = MemberApplication
-#         fields = (
-#             "membership_type",
-            
-#         )
+
 
 
 # class RejectMemberApplicationSerializer(serializers.ModelSerializer):
