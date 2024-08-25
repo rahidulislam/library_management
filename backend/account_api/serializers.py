@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, RefreshToken
-from account.models import MemberApplication, User, Profile
+from account.models import User, Profile
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -90,15 +90,16 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return data
 
 
-class MemberApplicationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MemberApplication
-        fields = (
-            "membership_type",
-        )
+# class MemberApplicationSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = MemberApplication
+#         fields = (
+#             "membership_type",
+            
+#         )
 
 
-class RejectMemberApplicationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MemberApplication
-        fields = ("reject_feedback",)
+# class RejectMemberApplicationSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = MemberApplication
+#         fields = ("reject_feedback",)

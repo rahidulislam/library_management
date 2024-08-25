@@ -51,6 +51,7 @@ LOCAL_APPS = [
     "account_api",
     "book",
     "library",
+    "membership",
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS

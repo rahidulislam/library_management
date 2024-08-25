@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from backend.base import TimeStamp
-from library.models import LibraryBranch
 
 
 # Create your models here.
@@ -32,49 +31,11 @@ class Profile(TimeStamp):
         return self.user.email
 
 
-class Member(TimeStamp):
+class MemberShip(TimeStamp):
     class MembershipType(models.TextChoices):
         REGULAR = "Regular", "Regular"
         PREMIUM = "Premium", "Premium"
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="member")
-    library_branch = models.ForeignKey(
-        LibraryBranch, on_delete=models.CASCADE, related_name="members"
-    )
-    membership_date = models.DateField(auto_now_add=True)
     membership_type = models.CharField(
         max_length=50, choices=MembershipType.choices, default=MembershipType.REGULAR
     )
-
-    def __str__(self):
-        return self.user.username
-
-
-class MemberApplication(TimeStamp):
-    class MembershipType(models.TextChoices):
-        REGULAR = "Regular", "Regular"
-        PREMIUM = "Premium", "Premium"
-    class Status(models.TextChoices):
-        PENDING = "PENDING", "Pending"
-        APPROVED = "APPROVED", "Approved"
-        REJECTED = "REJECTED", "Rejected"
-
-    user = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE,
-        related_name="member_application",
-    )
-    status = models.CharField(
-        max_length=10, choices=Status.choices, default=Status.PENDING
-    )
-    membership_type = models.CharField(
-        max_length=50, choices=MembershipType.choices, default=MembershipType.REGULAR
-    )
-    reject_feedback = models.TextField(blank=True)
-
-    class Meta:
-        verbose_name = "Member Application"
-        verbose_name_plural = "Member Applications"
-
-    def __str__(self):
-        return self.user.email

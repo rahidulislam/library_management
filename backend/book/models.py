@@ -1,7 +1,7 @@
 from django.db import models
 from backend.base import TimeStamp
 from library.models import LibraryBranch
-from account.models import Member
+from membership.models import Member
 
 
 # Create your models here.
