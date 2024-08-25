@@ -8,4 +8,4 @@ admin.site.register(MemberApplication)
 
 @admin.register(SubscriptionPlan)
 class SubscriptionPlanAdmin(admin.ModelAdmin):
-    list_display = ('id','name', 'duration_months', 'price')
+    list_display = ('id','name', 'duration_months', 'price', 'library_branch')

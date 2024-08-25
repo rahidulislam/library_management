@@ -13,6 +13,9 @@ class SubscriptionPlan(models.Model):
         YEARLY = "YEARLY", "Yearly"
         LIFETIME = "LIFETIME", "Lifetime"
 
+    library_branch = models.ForeignKey(
+        "library.LibraryBranch", on_delete=models.CASCADE, related_name="subscription_plans"
+    )
     name = models.CharField(max_length=100)
     subscription_type = models.CharField(
         max_length=20, choices=SubscriptionType.choices
@@ -29,9 +32,9 @@ class SubscriptionPlan(models.Model):
 
 class Member(TimeStamp):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="member")
-    library_branch = models.ForeignKey(
-        LibraryBranch, on_delete=models.CASCADE, related_name="members"
-    )
+    # library_branch = models.ForeignKey(
+    #     LibraryBranch, on_delete=models.CASCADE, related_name="members"
+    # )
     membership_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
