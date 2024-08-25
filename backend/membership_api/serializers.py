@@ -33,6 +33,10 @@ class MemberSubscriptionSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['subscription_plan'] = instance.subscription_plan.name
+        data['subscription_type'] = instance.subscription_plan.subscription_type
+        data['subscription_pice'] = instance.subscription_plan.price
+        data['library'] = instance.subscription_plan.library_branch.library.name
+        data['library_branch'] = instance.subscription_plan.library_branch.name
         return data
 
 

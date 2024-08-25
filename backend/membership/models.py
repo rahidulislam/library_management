@@ -60,7 +60,7 @@ class MemberSubscription(models.Model):
         super().save(*args, **kwargs)
 
     def is_active(self):
-        return self.end_date >= timezone.now()
+        return self.end_date >= timezone.now().date()
 
     def __str__(self):
         return f"{self.member.user.email} - {self.subscription_plan.name}"

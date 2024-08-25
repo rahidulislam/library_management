@@ -61,4 +61,4 @@ class MemberDetailsView(generics.RetrieveAPIView):
 
     
     def get_object(self):
-        return get_object_or_404(Member, user=self.request.user)
+        return get_object_or_404(Member.objects.prefetch_related('subscription', 'subscription__subscription_plan','subscription__subscription_plan__library_branch', 'subscription__subscription_plan__library_branch__library'), user=self.request.user)
