@@ -24,23 +24,15 @@ class Book(TimeStamp):
     isbn = models.CharField(max_length=13, unique=True)
     publication_date = models.DateField()
     genre = models.CharField(max_length=100, blank=True)
+    total_copies = models.PositiveIntegerField(default=1)
+
 
     def __str__(self):
         return self.title
+    @property
+    def available_copies(self):
+        return self.total_copies - Borrowing.objects.filter(book=self, returned_date__isnull=True,is_returned=False).count()
 
-
-class BranchBook(TimeStamp):
-    book = models.ForeignKey(
-        Book, on_delete=models.CASCADE, related_name="branch_books"
-    )
-    library_branch = models.ForeignKey(
-        LibraryBranch, on_delete=models.CASCADE, related_name="branch_books"
-    )
-    available_copies = models.PositiveIntegerField(default=1)
-    total_copies = models.PositiveIntegerField(default=1)
-
-    def __str__(self):
-        return f"{self.book.title} at {self.library_branch.name}"
 
 
 class Borrowing(models.Model):
@@ -51,9 +43,7 @@ class Borrowing(models.Model):
     borrowed_date = models.DateField(auto_now_add=True)
     due_date = models.DateField()
     returned_date = models.DateField(blank=True, null=True)
-    library_branch = models.ForeignKey(
-        LibraryBranch, on_delete=models.CASCADE, related_name="borrowings"
-    )
+    is_returned = models.BooleanField(default=False)
 
     # def is_overdue(self):
     #     return self.returned_date is None and self.due_date < date.today()
@@ -61,12 +51,3 @@ class Borrowing(models.Model):
     def __str__(self):
         return f"{self.member.user.username} - {self.book.title}"
 
-
-class Return(models.Model):
-    borrowing = models.OneToOneField(
-        Borrowing, on_delete=models.CASCADE, related_name="return_books"
-    )
-    returned_date = models.DateField()
-
-    def __str__(self):
-        return f"{self.borrowing.member.user.username} - {self.borrowing.book.title} returned"
