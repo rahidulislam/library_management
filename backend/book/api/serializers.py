@@ -41,6 +41,24 @@ class BorrowingListSerializer(BorrowingSerializer):
             "book": instance.book.title,
             "member": instance.member.user.email,
             "borrowed_date": instance.borrowed_date.strftime("%Y-%m-%d"),
+            "borrow_id": instance.borrow_id,
             "is_returned": instance.is_returned
+        })
+        return data
+class CheckBorrowingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Borrowing
+        fields = ('borrow_id', )
+    
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data.update({
+            "id": instance.id,
+            "book": instance.book.title,
+            "member": instance.member.user.email,
+            "borrowed_date": instance.borrowed_date.strftime("%Y-%m-%d"),
+            "due_date": instance.due_date.strftime("%Y-%m-%d"),
+            "is_returned": instance.is_returned,
+            "returned_date": instance.returned_date
         })
         return data
