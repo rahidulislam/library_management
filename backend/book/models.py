@@ -1,6 +1,6 @@
 from django.db import models
+import uuid
 from backend.base import TimeStamp
-from library.models import LibraryBranch
 from membership.models import Member
 
 
@@ -44,6 +44,7 @@ class Borrowing(models.Model):
     due_date = models.DateField()
     returned_date = models.DateField(blank=True, null=True)
     is_returned = models.BooleanField(default=False)
+    borrow_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     # def is_overdue(self):
     #     return self.returned_date is None and self.due_date < date.today()
