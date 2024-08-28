@@ -45,6 +45,7 @@ class Borrowing(models.Model):
     returned_date = models.DateField(blank=True, null=True)
     is_returned = models.BooleanField(default=False)
     borrow_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
 
     # def is_overdue(self):
     #     return self.returned_date is None and self.due_date < date.today()
