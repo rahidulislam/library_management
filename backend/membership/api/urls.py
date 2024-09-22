@@ -1,5 +1,5 @@
 from django.urls import path
-from membership_api.views import (
+from membership.api.views import (
     MemberApplicationListCreateView,
     AcceptMemberApplicationView,
     MemberDetailsView,

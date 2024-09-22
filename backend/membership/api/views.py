@@ -1,12 +1,11 @@
-from django.utils import timezone
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, status, permissions
+from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from backend.permissions import IsAdmin,IsMember
-from account.models import User
+
 from membership.models import MemberApplication, Member, MemberSubscription
-from membership_api.serializers import MemberApplicationSerializer,MemberApplicationListSerializer,MemberSerializer
+from membership.api.serializers import MemberApplicationSerializer,MemberApplicationListSerializer,MemberSerializer
 
 # Create your views here.
 class MemberApplicationListCreateView(generics.ListCreateAPIView):
