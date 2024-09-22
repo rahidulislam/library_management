@@ -121,3 +121,19 @@ class CheckBorrowingBookAPIView(generics.RetrieveAPIView):
         return get_object_or_404(
             Borrowing, borrow_id=self.request.data.get("borrow_id")
         )
+
+class ReturnBookAPIView(APIView):
+    permission_classes = [IsMember]
+
+    def post(self, request, borrow_id):
+        # Get the borrowing record based on the provided borrow_id
+        borrowing = get_object_or_404(Borrowing, borrow_id=borrow_id)
+        
+        # Check if the book has already been returned
+        if borrowing.is_returned:
+            return Response({"error": "Book has already been returned."}, status=status.HTTP_400_BAD_REQUEST)
+        # Mark the book as returned
+        borrowing.returned_date = datetime.now().date()
+        borrowing.is_returned = True
+        borrowing.save()
+        return Response({"message": "Book returned successfully"}, status=status.HTTP_200_OK)
