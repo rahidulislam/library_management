@@ -78,7 +78,7 @@ class BorrowingCreateAPIView(generics.CreateAPIView):
                 {"details": "This member has already borrowed this book."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        if Borrowing.objects.filter(is_returned=False).count() >= book.total_copies:
+        if Borrowing.objects.filter(book=book,returned_date__isnull=True,is_returned=False).count() >= book.total_copies:
             return Response(
                 {"details": "No available copies of this book."},
                 status=status.HTTP_400_BAD_REQUEST,
