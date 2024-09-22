@@ -50,6 +50,9 @@ class Borrowing(models.Model):
     is_returned = models.BooleanField(default=False)
     borrow_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     qr_code = models.ImageField(upload_to="qr_codes/", blank=True, null=True)
+    late_fee = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0
+    )
 
     # def is_overdue(self):
     #     return self.returned_date is None and self.due_date < date.today()
@@ -59,3 +62,11 @@ class Borrowing(models.Model):
 
     def get_qr_code_url(self):
         return self.qr_code.url if self.qr_code else None
+    
+    def calculated_late_fee(self, daily_rate=1.0):
+        if self.returned_date and self.returned_date > self.due_date:
+            late_days = (self.returned_date - self.due_date).days
+            self.late_fee = late_days * daily_rate
+        else:
+            self.late_fee = 0.0
+        self.save()

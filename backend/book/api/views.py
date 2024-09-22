@@ -136,4 +136,7 @@ class ReturnBookAPIView(APIView):
         borrowing.returned_date = datetime.now().date()
         borrowing.is_returned = True
         borrowing.save()
+
+        # Calculate late fee if overdue
+        borrowing.calculated_late_fee(daily_rate=2.0)
         return Response({"message": "Book returned successfully"}, status=status.HTTP_200_OK)
