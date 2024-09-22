@@ -7,6 +7,7 @@ from book.api.views import (
     BorrowingCreateAPIView,
     MemberBorrowingListAPIView,
     CheckBorrowingBookAPIView,
+    ReturnBookAPIView,
 )
 
 app_name = "book_api"
@@ -35,4 +36,5 @@ urlpatterns = [
         CheckBorrowingBookAPIView.as_view(),
         name="check_borrowing_book",
     ),
+    path("return/<str:borrow_id>/", ReturnBookAPIView.as_view(), name="return_book"),
 ]

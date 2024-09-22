@@ -7,4 +7,4 @@ class BookAdmin(admin.ModelAdmin):
 
 @admin.register(Borrowing)
 class BorrowingAdmin(admin.ModelAdmin):
-    list_display = ('id','member','book','borrowed_date','due_date',)
+    list_display = ('id','member','book','borrow_id','borrowed_date','due_date',)
