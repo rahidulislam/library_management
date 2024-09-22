@@ -3,7 +3,6 @@ from django.utils import timezone
 from datetime import timedelta
 from backend.base import TimeStamp
 from account.models import User
-from library.models import LibraryBranch
 # Create your models here.
 
 
